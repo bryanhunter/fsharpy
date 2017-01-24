@@ -134,11 +134,13 @@ defmodule Fsharpy do
     end
 
     defp find_fsi_path do
-        fsi_names = Application.get_env(:fsharpy, :fsi_names)
-
-        if fsi_names == nil do
-            raise "No F# interactive names were found in the config."
-        end
+        fsi_names =
+            case Application.get_env(:fsharpy, :fsi_names) do
+                nil ->
+                    ["fsi", "fsharpi"]
+                config ->
+                    config
+            end
 
         fsi = fsi_names
             |> Enum.find_value(&System.find_executable/1)

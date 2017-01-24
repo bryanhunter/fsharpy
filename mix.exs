@@ -36,7 +36,6 @@ defmodule Fsharpy.Mixfile do
   defp package do
     [
      name: :fsharpy,
-     files: ["lib", "priv", "mix.exs", "README*", "readme*", "LICENSE*", "license*"],
      maintainers: ["Bryan Hunter"],
      licenses: ["MIT"],
      links: %{"GitHub" => "https://github.com/bryanhunter/fsharpy"}
