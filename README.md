@@ -41,7 +41,7 @@ F#:       See 'fsharpi --help' for options
 :ok
 ```
 
-To get evaluate F# code and get results that can be used programatically in Elixir
+To evaluate F# code and get results that can be used programatically in Elixir
 you can use the `eval` function
 
 ```
@@ -58,7 +58,7 @@ iex> map["it"] |> Enum.reverse
 [50, 40, 30, 20, 10]
 ```
 
-To shut down the Fsahrpy session
+To shut down the Fsharpy session
 ```
 iex>  Fsharpy.quit p
 :ok
