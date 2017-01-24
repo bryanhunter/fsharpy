@@ -3,9 +3,8 @@ defmodule Fsharpy.FromFsharp do
     Helper functions to take FSI output and convert `val` items into their
     appoxiamate Elixir equivalents.
     """
-
     def get_vals raw_output do
-        maps = raw_output
+        raw_output
             |> String.replace("list =\n", "list = ")
             |> String.split("\n")
             |> Enum.filter(fn z -> String.starts_with?(z, "val ") end)
