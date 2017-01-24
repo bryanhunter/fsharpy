@@ -1,6 +1,6 @@
 use Mix.Config
 
-config :fsharp_ex,
+config :fsharpy,
     fsi_names: ["fsi", "fsharpi"]
 
 config :logger,

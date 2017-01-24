@@ -1,10 +1,11 @@
-defmodule FsharpEx do
+defmodule Fsharpy do
     @moduledoc """
     Access F# interactive (FSI) from Elixir.
     """
-
     use GenServer
     require Logger
+
+    alias Fsharpy.FromFsharp
 
     @port_line_max 1024 * 8
     @timeout 10 * 1000
@@ -18,10 +19,14 @@ defmodule FsharpEx do
     end
 
     @doc """
-    Quits an F# sessionF
+    Quits an F# session
     """
     def quit(server) do
         GenServer.cast(server, :quit)
+    end
+
+    def get_raw(server, expression) do
+        GenServer.call(server, {:eval, expression})
     end
 
     @doc """
@@ -29,7 +34,8 @@ defmodule FsharpEx do
     expression as an unformatted string
     """
     def eval(server, expression) do
-        GenServer.call(server, {:eval, expression})
+        result = get_raw(server, expression)
+        FromFsharp.get_vals(result)
     end
 
     @doc """
@@ -37,7 +43,7 @@ defmodule FsharpEx do
     expression.
     """
     def print(server, expression) do
-        result = eval(server, expression)
+        result = get_raw(server, expression)
         result
         |> String.trim_leading
         |> String.trim_trailing
@@ -94,6 +100,7 @@ defmodule FsharpEx do
     end
 
     ## Helper functions
+
     defp add_gutter(multi_line_text) do
         prefixed = "\n" <> multi_line_text
         gutter = "\n#{IO.ANSI.cyan_background}#{IO.ANSI.white}F#:"
@@ -127,7 +134,11 @@ defmodule FsharpEx do
     end
 
     defp find_fsi_path do
-        fsi_names = Application.get_env(:fsharp_ex, :fsi_names)
+        fsi_names = Application.get_env(:fsharpy, :fsi_names)
+
+        if fsi_names == nil do
+            raise "No F# interactive names were found in the config."
+        end
 
         fsi = fsi_names
             |> Enum.find_value(&System.find_executable/1)
